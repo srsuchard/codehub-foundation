@@ -12,7 +12,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Absolute base for canonical links and OG image URLs. Falls back to the
+// production domain when the deployment doesn't provide a URL.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://codehubfoundation.org";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "CodeHub Foundation — Learn. Build. Innovate.",
     template: "%s | CodeHub Foundation",
@@ -31,6 +39,8 @@ export const metadata: Metadata = {
     description:
       "Free coding education, technology mentorship, and real-world projects for students.",
     siteName: "CodeHub Foundation",
+    url: "/",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
