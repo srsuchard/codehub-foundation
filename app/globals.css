@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #05060a;
+  --color-surface: #0a0e18;
+  --color-line: #1a2234;
+  --color-neon-blue: #38bdf8;
+  --color-neon-purple: #a855f7;
+  --color-neon-green: #34d399;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keep anchored headings clear of the sticky header. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: #e6e9f0;
+}
+
+::selection {
+  background-color: var(--color-neon-purple);
+  color: #fff;
+}
+
+/* Faint circuit grid behind the hero. */
+.grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 85, 247, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
