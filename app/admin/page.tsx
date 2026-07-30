@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { signOut } from "../lib/admin-actions";
-import { getAdminUser } from "../lib/auth";
-import { getSupabase } from "../lib/supabase";
+import { createAuthClient, getSessionProfile } from "../lib/auth";
+import { isStaff, ROLE_LABELS } from "../lib/roles";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
 
 /**
  * Never prerender an auth-gated page. Without this, a build where the auth env
- * vars are absent skips the cookie read entirely and Next happily bakes this
- * page — including its redirect — into static HTML.
+ * vars are absent skips the cookie read and Next bakes this page — including
+ * its redirect — into static HTML.
  */
 export const dynamic = "force-dynamic";
 
@@ -99,27 +100,18 @@ function formatDate(value: string) {
 }
 
 export default async function AdminPage() {
-  const user = await getAdminUser();
-  if (!user) redirect("/admin/login");
+  const profile = await getSessionProfile();
 
-  const supabase = getSupabase();
+  if (!profile) redirect("/admin/login");
+  if (!isStaff(profile.role)) redirect("/admin/no-access");
 
-  if (!supabase) {
-    return (
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-2xl">
-          <h1 className="text-3xl font-bold">Admin</h1>
-          <p className="mt-4 text-rose-300">
-            Supabase isn&apos;t configured, so there&apos;s nothing to read.
-          </p>
-        </div>
-      </section>
-    );
-  }
+  // Reads run on the user's own session, so row-level security applies. A
+  // non-staff session reaching here would get zero rows, not a leak.
+  const supabase = await createAuthClient();
 
   const results = await Promise.all(
     TABLES.map(async (config) => {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from(config.table)
         .select("*")
         .order("created_at", { ascending: false })
@@ -139,18 +131,31 @@ export default async function AdminPage() {
             <h1 className="text-3xl font-bold tracking-tight">Submissions</h1>
             <p className="mt-2 text-slate-400">
               Signed in as{" "}
-              <span className="font-mono text-slate-300">{user.email}</span> ·{" "}
-              {total} total
+              <span className="font-mono text-slate-300">{profile.email}</span>{" "}
+              <span className="rounded-full border border-neon-purple/40 bg-neon-purple/10 px-2 py-0.5 font-mono text-xs text-neon-purple">
+                {ROLE_LABELS[profile.role]}
+              </span>{" "}
+              · {total} total
             </p>
           </div>
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-purple hover:text-neon-purple"
-            >
-              Sign out
-            </button>
-          </form>
+          <div className="flex items-center gap-3">
+            {profile.role === "admin" && (
+              <Link
+                href="/admin/team"
+                className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-blue hover:text-neon-blue"
+              >
+                Team &amp; roles
+              </Link>
+            )}
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-purple hover:text-neon-purple"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
 
         <dl className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-5">

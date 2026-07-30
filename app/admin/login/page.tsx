@@ -3,10 +3,11 @@ import { redirect } from "next/navigation";
 
 import { LoginForm } from "../../components/admin-login-form";
 import {
-  getAdminUser,
   getAuthConfigStatus,
+  getSessionProfile,
   isAuthConfigured,
 } from "../../lib/auth";
+import { isStaff } from "../../lib/roles";
 
 export const metadata: Metadata = {
   title: "Admin sign in",
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminLoginPage() {
-  if (await getAdminUser()) redirect("/admin");
+  const profile = await getSessionProfile();
+  if (isStaff(profile?.role)) redirect("/admin");
 
   const configured = isAuthConfigured();
 
