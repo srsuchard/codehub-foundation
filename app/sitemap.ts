@@ -12,6 +12,7 @@ const ROUTES = [
   "/sponsors",
   "/events",
   "/projects",
+  "/donate",
   "/contact",
 ];
 

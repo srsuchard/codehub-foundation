@@ -18,6 +18,7 @@ const FOOTER_GROUPS = [
       { href: "/students", label: "Students" },
       { href: "/mentors", label: "Mentors" },
       { href: "/sponsors", label: "Sponsors" },
+      { href: "/donate", label: "Donate" },
       { href: "/board", label: "Board" },
     ],
   },

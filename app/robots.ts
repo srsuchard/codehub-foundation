@@ -8,6 +8,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // Applicant data lives behind here; keep it out of search results.
+      disallow: "/admin",
     },
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,

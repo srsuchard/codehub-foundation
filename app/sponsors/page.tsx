@@ -99,9 +99,15 @@ export default function SponsorsPage() {
               interested in supporting. We&apos;ll send our partnership deck and
               find a time to talk.
             </p>
+            {/*
+              Not yet a 501(c)(3) — this must not imply deductibility or offer
+              tax documentation. Revisit only on IRS determination.
+            */}
             <p className="mt-4 text-sm text-slate-500">
-              CodeHub Foundation is a nonprofit organization. We&apos;ll provide
-              documentation for your records with any contribution.
+              CodeHub Foundation operates as a nonprofit but has not yet
+              received 501(c)(3) determination, so contributions are not
+              tax-deductible at this time. We&apos;re happy to discuss what that
+              means for your organization.
             </p>
           </div>
 
