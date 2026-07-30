@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CodeHub Foundation
 
-## Getting Started
+Website for CodeHub Foundation — free coding education, technology mentorship,
+and real-world projects for students.
 
-First, run the development server:
+Built with Next.js 16 (App Router) and Tailwind CSS v4. The site is fully
+static: the mobile nav uses a CSS-only `<details>` disclosure, so no client
+JavaScript is shipped.
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm run lint    # Next 16 no longer lints during `next build` — run this separately
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
 
-## Learn More
+| Path                            | Purpose                                     |
+| ------------------------------- | ------------------------------------------- |
+| `app/page.tsx`                  | Homepage — all sections and their content   |
+| `app/components/site-header.tsx`| Sticky nav                                  |
+| `app/layout.tsx`                | Root layout, fonts, site metadata           |
+| `app/globals.css`               | Tailwind import, brand color tokens         |
+| `app/robots.ts`, `app/sitemap.ts` | Generated `robots.txt` and `sitemap.xml`  |
 
-To learn more about Next.js, take a look at the following resources:
+Section copy lives in the `PROGRAMS`, `STATS`, `MENTOR_EXPECTATIONS`, and
+`SPONSOR_TIERS` arrays at the top of `app/page.tsx` — edit those rather than
+the JSX below them.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Configuration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`NEXT_PUBLIC_SITE_URL` sets the canonical origin used by metadata, `robots.txt`,
+and `sitemap.xml`. It defaults to `https://codehubfoundation.org`. Set it on
+preview deployments so they don't advertise the production domain.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deployed on Vercel from `main`. Pushes to `main` trigger a production build.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contact
+
+hello@codehubfoundation.org
