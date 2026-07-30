@@ -3,8 +3,10 @@
 import { useActionState } from "react";
 
 import {
+  submitBoardApplication,
   submitContactMessage,
   submitMentorApplication,
+  submitSponsorInquiry,
   submitStudentApplication,
 } from "../lib/actions";
 import { INITIAL_FORM_STATE } from "../lib/schemas";
@@ -155,6 +157,108 @@ export function MentorForm() {
       <FormMessage state={state} />
       <div>
         <SubmitButton pending={pending}>Apply to mentor</SubmitButton>
+      </div>
+    </form>
+  );
+}
+
+export function BoardForm() {
+  const [state, action, pending] = useActionState(
+    submitBoardApplication,
+    INITIAL_FORM_STATE,
+  );
+
+  if (state.status === "success") {
+    return (
+      <Submitted>
+        The board reviews applications on a rolling basis and will be in touch.
+      </Submitted>
+    );
+  }
+
+  return (
+    <form action={action} className="grid gap-5">
+      <Honeypot />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field name="name" label="Full name" state={state} required />
+        <Field name="email" label="Email" type="email" state={state} required />
+      </div>
+      <TextArea
+        name="experience"
+        label="Your background"
+        hint="Professional, nonprofit, or governance experience"
+        state={state}
+        rows={4}
+        required
+      />
+      <TextArea
+        name="skills"
+        label="Skills you'd bring"
+        placeholder="e.g. fundraising, finance, curriculum, legal, engineering"
+        state={state}
+        rows={3}
+        required
+      />
+      <TextArea
+        name="motivation"
+        label="Why CodeHub?"
+        hint="What draws you to this mission"
+        state={state}
+        rows={4}
+        required
+      />
+      <FormMessage state={state} />
+      <div>
+        <SubmitButton pending={pending}>Submit application</SubmitButton>
+      </div>
+    </form>
+  );
+}
+
+export function SponsorForm({ interests }: { interests: string[] }) {
+  const [state, action, pending] = useActionState(
+    submitSponsorInquiry,
+    INITIAL_FORM_STATE,
+  );
+
+  if (state.status === "success") {
+    return (
+      <Submitted>
+        We&apos;ll follow up with our partnership deck within a few days.
+      </Submitted>
+    );
+  }
+
+  return (
+    <form action={action} className="grid gap-5">
+      <Honeypot />
+      <Field
+        name="company"
+        label="Organization"
+        state={state}
+        required
+      />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field name="name" label="Contact person" state={state} required />
+        <Field name="email" label="Email" type="email" state={state} required />
+      </div>
+      <Select
+        name="interest"
+        label="Partnership interest"
+        state={state}
+        required
+        options={interests}
+      />
+      <TextArea
+        name="message"
+        label="Anything you'd like us to know?"
+        hint="Optional — budget, timing, what you'd like to fund"
+        state={state}
+        rows={4}
+      />
+      <FormMessage state={state} />
+      <div>
+        <SubmitButton pending={pending}>Start the conversation</SubmitButton>
       </div>
     </form>
   );

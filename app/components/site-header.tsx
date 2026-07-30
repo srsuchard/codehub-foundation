@@ -5,6 +5,9 @@ export const NAV_LINKS = [
   { href: "/programs", label: "Programs" },
   { href: "/students", label: "Students" },
   { href: "/mentors", label: "Mentors" },
+  { href: "/events", label: "Events" },
+  { href: "/projects", label: "Projects" },
+  { href: "/sponsors", label: "Sponsors" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -22,7 +25,8 @@ export function SiteHeader() {
           <span className="text-lg">CodeHub</span>
         </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
+        {/* Eight links only fit comfortably at xl; below that they collapse. */}
+        <nav aria-label="Main" className="hidden items-center gap-5 xl:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -43,13 +47,13 @@ export function SiteHeader() {
           </Link>
 
           {/* CSS-only disclosure menu so mobile nav needs no client JS. */}
-          <details className="relative lg:hidden">
+          <details className="relative xl:hidden">
             <summary className="cursor-pointer list-none rounded-lg border border-line px-3 py-2 text-sm text-slate-200 [&::-webkit-details-marker]:hidden">
               Menu
             </summary>
             <nav
               aria-label="Mobile"
-              className="absolute right-0 mt-2 flex w-44 flex-col rounded-xl border border-line bg-surface p-2 shadow-xl shadow-black/50"
+              className="absolute right-0 mt-2 flex w-48 flex-col rounded-xl border border-line bg-surface p-2 shadow-xl shadow-black/50"
             >
               {NAV_LINKS.map((link) => (
                 <Link
@@ -60,6 +64,12 @@ export function SiteHeader() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/board"
+                className="rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-neon-blue"
+              >
+                Board
+              </Link>
             </nav>
           </details>
         </div>

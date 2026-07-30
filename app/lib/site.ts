@@ -125,3 +125,117 @@ export const STUDENT_RESOURCES = [
     body: "Free developer tools and credits for verified students.",
   },
 ];
+
+/**
+ * Leadership team. Fill in `name` and `bio` as seats are filled — any entry
+ * left without a name renders as an open seat rather than a fake person.
+ */
+export const BOARD: {
+  position: string;
+  name?: string;
+  bio?: string;
+}[] = [
+  { position: "Founder & President" },
+  { position: "Board Chair" },
+  { position: "Treasurer" },
+  { position: "Secretary" },
+  { position: "Technology Director" },
+];
+
+export const SPONSOR_TIERS = [
+  {
+    name: "Community Partner",
+    accent: "border-line",
+    featured: false,
+    summary: "Support events and community programming.",
+    benefits: [
+      "Underwrites a workshop or community meetup",
+      "Logo on event materials",
+      "Quarterly impact report",
+    ],
+  },
+  {
+    name: "Technology Partner",
+    accent: "border-neon-purple ring-1 ring-neon-purple/30",
+    featured: true,
+    summary: "Provide the tools and resources students learn on.",
+    benefits: [
+      "Provides software licenses, cloud credits, or hardware",
+      "Logo on our website and event materials",
+      "Invite your engineers to mentor",
+      "Quarterly impact report",
+    ],
+  },
+  {
+    name: "Innovation Partner",
+    accent: "border-neon-blue/50",
+    featured: false,
+    summary: "Fund a full program end to end.",
+    benefits: [
+      "Names a learning track or hackathon",
+      "Co-branded student showcase",
+      "Recruiting pipeline access",
+      "Annual partnership review",
+    ],
+  },
+];
+
+export const SPONSOR_INTERESTS = SPONSOR_TIERS.map((tier) => tier.name).concat(
+  "Not sure yet — let's talk",
+);
+
+export const EVENT_TYPES = [
+  {
+    icon: "🧑‍🏫",
+    title: "Workshops",
+    body: "Short, focused sessions on one topic — Git, APIs, deploying your first site.",
+  },
+  {
+    icon: "🚀",
+    title: "Hackathons",
+    body: "Weekend builds where teams ship a working project and present it.",
+  },
+  {
+    icon: "💡",
+    title: "Coding events",
+    body: "Study halls, code reviews, and pair-programming sessions with mentors.",
+  },
+  {
+    icon: "👥",
+    title: "Community meetings",
+    body: "Open sessions where students, mentors, and families meet the team.",
+  },
+];
+
+/**
+ * Upcoming events. Add entries as they're scheduled; an empty list renders
+ * the "nothing scheduled yet" state.
+ */
+export const EVENTS: {
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  registerUrl?: string;
+}[] = [];
+
+export const PROJECT_TYPES = [
+  "Apps",
+  "Websites",
+  "AI projects",
+  "Open-source tools",
+  "Hackathon builds",
+];
+
+/**
+ * Student work. Add entries as projects ship; an empty list renders the
+ * "first projects coming soon" state.
+ */
+export const PROJECTS: {
+  title: string;
+  student: string;
+  description: string;
+  tech: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+}[] = [];

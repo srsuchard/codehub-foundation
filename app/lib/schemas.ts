@@ -23,6 +23,30 @@ export const mentorSchema = z.object({
   availability: z.string().trim().min(1, "Please pick your availability"),
 });
 
+export const boardSchema = z.object({
+  name,
+  email,
+  experience: z
+    .string()
+    .trim()
+    .min(10, "Tell us a bit about your background")
+    .max(1500),
+  skills: z.string().trim().min(2, "Please list a few skills").max(500),
+  motivation: z
+    .string()
+    .trim()
+    .min(10, "Tell us why you'd like to join")
+    .max(1500),
+});
+
+export const sponsorSchema = z.object({
+  company: z.string().trim().min(2, "Please enter your organization").max(150),
+  name,
+  email,
+  interest: z.string().trim().min(1, "Please choose a partnership level"),
+  message: optionalText(2000),
+});
+
 export const contactSchema = z.object({
   name,
   email,

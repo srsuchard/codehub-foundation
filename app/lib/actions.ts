@@ -3,8 +3,10 @@
 import { z } from "zod";
 
 import {
+  boardSchema,
   contactSchema,
   mentorSchema,
+  sponsorSchema,
   studentSchema,
   type FormState,
 } from "./schemas";
@@ -86,4 +88,18 @@ export async function submitContactMessage(
   formData: FormData,
 ): Promise<FormState> {
   return submit(contactSchema, "contact_messages", formData);
+}
+
+export async function submitBoardApplication(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  return submit(boardSchema, "board_applications", formData);
+}
+
+export async function submitSponsorInquiry(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  return submit(sponsorSchema, "sponsor_inquiries", formData);
 }

@@ -38,9 +38,31 @@ create table if not exists public.contact_messages (
   message    text not null
 );
 
+create table if not exists public.board_applications (
+  id         uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name       text not null,
+  email      text not null,
+  experience text not null,
+  skills     text not null,
+  motivation text not null
+);
+
+create table if not exists public.sponsor_inquiries (
+  id         uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  company    text not null,
+  name       text not null,
+  email      text not null,
+  interest   text not null,
+  message    text
+);
+
 alter table public.student_applications enable row level security;
 alter table public.mentor_applications  enable row level security;
 alter table public.contact_messages     enable row level security;
+alter table public.board_applications   enable row level security;
+alter table public.sponsor_inquiries    enable row level security;
 
 create index if not exists student_applications_created_at_idx
   on public.student_applications (created_at desc);
@@ -48,3 +70,7 @@ create index if not exists mentor_applications_created_at_idx
   on public.mentor_applications (created_at desc);
 create index if not exists contact_messages_created_at_idx
   on public.contact_messages (created_at desc);
+create index if not exists board_applications_created_at_idx
+  on public.board_applications (created_at desc);
+create index if not exists sponsor_inquiries_created_at_idx
+  on public.sponsor_inquiries (created_at desc);
