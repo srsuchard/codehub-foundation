@@ -40,7 +40,11 @@ export default function BoardPage() {
               {member.name ? (
                 <>
                   <h3 className="mt-3 text-xl font-bold">{member.name}</h3>
-                  <p className="mt-3 text-slate-400">{member.bio}</p>
+                  {/* Bio is optional — a filled seat without one shouldn't
+                      render an empty paragraph. */}
+                  {member.bio && (
+                    <p className="mt-3 text-slate-400">{member.bio}</p>
+                  )}
                 </>
               ) : (
                 <>

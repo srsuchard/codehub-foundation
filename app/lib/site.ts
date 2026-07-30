@@ -135,7 +135,11 @@ export const BOARD: {
   name?: string;
   bio?: string;
 }[] = [
-  { position: "Founder & President" },
+  {
+    position: "Founder & President",
+    name: "Samuel Suchard",
+    // bio: "Add a sentence or two here and it appears under the name.",
+  },
   { position: "Board Chair" },
   { position: "Treasurer" },
   { position: "Secretary" },
