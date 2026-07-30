@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { RoleSelect } from "../../components/role-select";
@@ -31,14 +30,7 @@ export default async function TeamPage() {
   return (
     <section className="px-6 py-16">
       <div className="mx-auto max-w-4xl">
-        <Link
-          href="/admin"
-          className="text-sm text-slate-400 hover:text-neon-blue"
-        >
-          ← Submissions
-        </Link>
-
-        <h1 className="mt-4 text-3xl font-bold tracking-tight">Team &amp; roles</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Team &amp; roles</h1>
         <p className="mt-2 text-slate-400">
           Everyone with an account. Roles decide what each person can reach —
           only <strong className="text-slate-300">Admin</strong> and{" "}

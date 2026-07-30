@@ -44,11 +44,7 @@ export default async function ProgramsPage() {
   return (
     <section className="px-6 py-16">
       <div className="mx-auto max-w-4xl">
-        <Link href="/admin" className="text-sm text-slate-400 hover:text-neon-blue">
-          ← Submissions
-        </Link>
-
-        <h1 className="mt-4 text-3xl font-bold tracking-tight">Programs</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Programs</h1>
         <p className="mt-2 text-slate-400">
           Classes, workshops, and events — who&apos;s teaching them and
           who&apos;s enrolled.

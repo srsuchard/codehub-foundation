@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { signOut } from "../lib/admin-actions";
 import { createAuthClient, getSessionProfile } from "../lib/auth";
 import { isStaff, ROLE_LABELS } from "../lib/roles";
 
@@ -137,36 +135,6 @@ export default async function AdminPage() {
               </span>{" "}
               · {total} total
             </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin/programs"
-              className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-blue hover:text-neon-blue"
-            >
-              Programs
-            </Link>
-            <Link
-              href="/admin/volunteers"
-              className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-green hover:text-neon-green"
-            >
-              Volunteers
-            </Link>
-            {profile.role === "admin" && (
-              <Link
-                href="/admin/team"
-                className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-blue hover:text-neon-blue"
-              >
-                Team &amp; roles
-              </Link>
-            )}
-            <form action={signOut}>
-              <button
-                type="submit"
-                className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-purple hover:text-neon-purple"
-              >
-                Sign out
-              </button>
-            </form>
           </div>
         </div>
 
