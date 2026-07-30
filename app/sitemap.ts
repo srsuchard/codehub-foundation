@@ -1,15 +1,16 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://codehubfoundation.org";
+import { SITE_URL } from "./lib/site";
+
+const ROUTES = ["", "/about", "/programs", "/students", "/mentors", "/contact"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: siteUrl,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-  ];
+  const lastModified = new Date();
+
+  return ROUTES.map((route) => ({
+    url: `${SITE_URL}${route}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: route === "" ? 1 : 0.8,
+  }));
 }
