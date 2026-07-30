@@ -66,7 +66,6 @@ export type Volunteer = {
   status: VolunteerStatus;
   background_check: BackgroundCheckStatus;
   training_completed_at: string | null;
-  assigned_programs: string | null;
   internal_notes: string | null;
   updated_at: string | null;
 };

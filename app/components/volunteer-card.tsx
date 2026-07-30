@@ -107,22 +107,6 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
 
         <label className="block">
           <span className="text-xs text-slate-500">
-            Assigned programs{" "}
-            <span className="text-slate-600">
-              (free text until programs exist)
-            </span>
-          </span>
-          <input
-            type="text"
-            name="assigned_programs"
-            defaultValue={volunteer.assigned_programs ?? ""}
-            placeholder="e.g. Python cohort — Spring"
-            className={`mt-1 ${fieldClass}`}
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-xs text-slate-500">
             Internal notes{" "}
             <span className="text-slate-600">(not visible to the applicant)</span>
           </span>

@@ -25,7 +25,6 @@ const updateSchema = z.object({
     "not_cleared",
   ]),
   training_completed: z.union([z.literal("on"), z.literal("")]).optional(),
-  assigned_programs: z.string().trim().max(500).optional(),
   internal_notes: z.string().trim().max(4000).optional(),
 });
 
@@ -85,7 +84,6 @@ export async function updateVolunteer(
     .update({
       status: fields.status,
       background_check: fields.background_check,
-      assigned_programs: fields.assigned_programs || null,
       internal_notes: fields.internal_notes || null,
       training_completed_at: trainingCompletedAt,
     })
