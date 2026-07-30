@@ -139,6 +139,12 @@ export default async function AdminPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/admin/volunteers"
+              className="rounded-lg border border-line px-4 py-2 text-sm text-slate-300 hover:border-neon-green hover:text-neon-green"
+            >
+              Volunteers
+            </Link>
             {profile.role === "admin" && (
               <Link
                 href="/admin/team"
