@@ -21,10 +21,16 @@ export async function GET() {
   return Response.json({
     SUPABASE_URL: describe(process.env.SUPABASE_URL),
     SUPABASE_SERVICE_ROLE_KEY: describe(process.env.SUPABASE_SERVICE_ROLE_KEY),
-    // Which Supabase-ish names DID make it through, in case of a typo.
-    supabaseLikeNames: Object.keys(process.env).filter((k) =>
-      k.toUpperCase().includes("SUPA"),
-    ),
+    // Every custom env var NAME visible at runtime (no values), so a
+    // misnamed variable is obvious. Vercel/system names are filtered out.
+    customEnvNames: Object.keys(process.env)
+      .filter(
+        (k) =>
+          !/^(VERCEL|NEXT_|NODE|npm_|PATH$|HOME$|PWD$|LANG|TERM|SHLVL|_$|AWS_|LAMBDA_|TZ$|HOSTNAME$|EDGE_)/.test(
+            k,
+          ),
+      )
+      .sort(),
     vercelEnv: process.env.VERCEL_ENV ?? null,
   });
 }
