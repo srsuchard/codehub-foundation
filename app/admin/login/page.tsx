@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "../../components/admin-login-form";
-import { getAdminUser, isAuthConfigured } from "../../lib/auth";
+import {
+  getAdminUser,
+  getAuthConfigStatus,
+  isAuthConfigured,
+} from "../../lib/auth";
 
 export const metadata: Metadata = {
   title: "Admin sign in",
@@ -33,10 +37,39 @@ export default async function AdminLoginPage() {
               <p className="font-semibold text-rose-300">
                 Admin sign-in isn&apos;t configured yet.
               </p>
-              <p className="mt-3">
-                Set <code className="text-neon-blue">SUPABASE_PUBLISHABLE_KEY</code>{" "}
-                and <code className="text-neon-blue">ADMIN_EMAILS</code> in the
-                deployment environment, then create the matching user under
+
+              <ul className="mt-5 grid gap-3">
+                {getAuthConfigStatus().map((item) => (
+                  <li key={item.name} className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className={item.ok ? "text-neon-green" : "text-rose-400"}
+                    >
+                      {item.ok ? "✓" : "✗"}
+                    </span>
+                    <span>
+                      <code
+                        className={item.ok ? "text-slate-400" : "text-rose-300"}
+                      >
+                        {item.name}
+                      </code>
+                      <span className="sr-only">
+                        {item.ok ? " is set" : " is missing"}
+                      </span>
+                      {!item.ok && (
+                        <span className="mt-1 block text-xs text-slate-500">
+                          {item.hint}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-5 text-xs text-slate-500">
+                Set the missing values in the deployment environment (Production
+                scope) and redeploy — environment changes don&apos;t apply to
+                existing deployments. Then create the matching user under
                 Supabase → Authentication → Users.
               </p>
             </div>

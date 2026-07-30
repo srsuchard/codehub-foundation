@@ -23,11 +23,34 @@ export function isAdminEmail(email: string | undefined | null): boolean {
 }
 
 export function isAuthConfigured(): boolean {
-  return Boolean(
-    process.env.SUPABASE_URL &&
-      process.env.SUPABASE_PUBLISHABLE_KEY &&
-      getAdminEmails().length > 0,
-  );
+  const status = getAuthConfigStatus();
+  return status.every((item) => item.ok);
+}
+
+/**
+ * Per-variable setup status for the sign-in screen. Reports presence only —
+ * never values. The names themselves are already public in .env.example.
+ */
+export function getAuthConfigStatus() {
+  const adminCount = getAdminEmails().length;
+
+  return [
+    {
+      name: "SUPABASE_URL",
+      ok: Boolean(process.env.SUPABASE_URL),
+      hint: "Supabase → Settings → API → Project URL",
+    },
+    {
+      name: "SUPABASE_PUBLISHABLE_KEY",
+      ok: Boolean(process.env.SUPABASE_PUBLISHABLE_KEY),
+      hint: "Supabase → Settings → API → publishable key (sb_publishable_…)",
+    },
+    {
+      name: "ADMIN_EMAILS",
+      ok: adminCount > 0,
+      hint: "Comma-separated emails allowed to sign in",
+    },
+  ];
 }
 
 /**
