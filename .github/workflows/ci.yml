@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A second push to the same PR makes the first run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # ci, not install: fails on a lockfile that doesn't match package.json
+      # rather than quietly resolving something different from production.
+      - run: npm ci
+
+      # Next 16 no longer lints during `next build`, so this must run on its own.
+      - run: npm run lint
+
+      # No secrets are set here on purpose. The build must succeed without
+      # Supabase credentials — the app is written to degrade rather than crash
+      # when they're absent, and this is what proves it stays that way.
+      - run: npm run build
