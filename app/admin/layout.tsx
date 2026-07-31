@@ -1,6 +1,6 @@
 import { AdminNav } from "../components/admin-nav";
 import { getSessionProfile } from "../lib/auth";
-import { isStaff } from "../lib/roles";
+import type { AppRole } from "../lib/roles";
 
 /**
  * Chrome only — this layout deliberately does NOT gate access.
@@ -16,7 +16,8 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const profile = await getSessionProfile();
-  const showNav = profile && isStaff(profile.role);
+  const PORTAL_ROLES: AppRole[] = ["admin", "staff", "board_member"];
+  const showNav = profile && PORTAL_ROLES.includes(profile.role);
 
   return (
     <>

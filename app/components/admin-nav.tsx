@@ -7,9 +7,12 @@ import { signOut } from "../lib/admin-actions";
 import { ROLE_LABELS, type AppRole } from "../lib/roles";
 
 const TABS = [
-  { href: "/admin", label: "Submissions", exact: true },
-  { href: "/admin/volunteers", label: "Volunteers" },
-  { href: "/admin/programs", label: "Programs" },
+  { href: "/admin", label: "Submissions", exact: true, staffOnly: true },
+  { href: "/admin/volunteers", label: "Volunteers", staffOnly: true },
+  { href: "/admin/programs", label: "Programs", staffOnly: true },
+  { href: "/admin/documents", label: "Documents", staffOnly: true },
+  // The only tab board members see.
+  { href: "/admin/board", label: "Board" },
   { href: "/admin/team", label: "Team & roles", adminOnly: true },
   { href: "/admin/audit", label: "Audit log", adminOnly: true },
 ];
@@ -17,7 +20,11 @@ const TABS = [
 export function AdminNav({ email, role }: { email: string; role: AppRole }) {
   const pathname = usePathname();
 
-  const visible = TABS.filter((tab) => !tab.adminOnly || role === "admin");
+  const isStaffRole = role === "admin" || role === "staff";
+  const visible = TABS.filter(
+    (tab) =>
+      (!tab.adminOnly || role === "admin") && (!tab.staffOnly || isStaffRole),
+  );
 
   return (
     <div className="border-b border-line bg-surface/60">

@@ -7,7 +7,7 @@ import {
   getSessionProfile,
   isAuthConfigured,
 } from "../../lib/auth";
-import { isStaff } from "../../lib/roles";
+import { isStaff, PORTAL_ROLES } from "../../lib/roles";
 
 export const metadata: Metadata = {
   title: "Admin sign in",
@@ -19,7 +19,9 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminLoginPage() {
   const profile = await getSessionProfile();
-  if (isStaff(profile?.role)) redirect("/admin");
+  if (profile && PORTAL_ROLES.includes(profile.role)) {
+    redirect(isStaff(profile.role) ? "/admin" : "/admin/board");
+  }
 
   const configured = isAuthConfigured();
 

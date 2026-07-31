@@ -21,6 +21,9 @@ export const ROLE_LABELS: Record<AppRole, string> = {
   student: "Student",
 };
 
+/** Roles with any access to the admin area. Mirrors public.is_board() in SQL. */
+export const PORTAL_ROLES: AppRole[] = ["admin", "staff", "board_member"];
+
 /** Roles permitted to read applicant data. Mirrors public.is_staff() in SQL. */
 export const STAFF_ROLES: AppRole[] = ["admin", "staff"];
 
