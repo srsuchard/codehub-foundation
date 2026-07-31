@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { DocumentList } from "../../components/document-list";
 import { MeetingForm } from "../../components/meeting-form";
-import { createAuthClient, getSessionProfile } from "../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../lib/auth";
 import {
   DOCUMENT_CATEGORY_LABELS,
   formatDay,
@@ -31,6 +31,7 @@ export default async function BoardPage() {
   if (!["admin", "staff", "board_member"].includes(profile.role)) {
     redirect("/admin/no-access");
   }
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const canManage = isStaff(profile.role);
   const supabase = await createAuthClient();

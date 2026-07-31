@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { DocumentList } from "../../components/document-list";
 import { DocumentUpload } from "../../components/document-upload";
-import { createAuthClient, getSessionProfile } from "../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../lib/auth";
 import {
   DOCUMENT_CATEGORY_LABELS,
   DOCUMENT_CATEGORIES,
@@ -30,6 +30,7 @@ export default async function DocumentsPage({
 
   if (!profile) redirect("/admin/login");
   if (!isStaff(profile.role)) redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const { category } = await searchParams;
   const activeCategory =

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { ProgramForm } from "../../components/program-form";
-import { createAuthClient, getSessionProfile } from "../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../lib/auth";
 import {
   formatDay,
   PROGRAM_KIND_LABELS,
@@ -30,6 +30,7 @@ export default async function ProgramsPage() {
 
   if (!profile) redirect("/admin/login");
   if (!isStaff(profile.role)) redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const supabase = await createAuthClient();
 
