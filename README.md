@@ -42,6 +42,11 @@ must never be exposed to the browser; `app/lib/supabase.ts` imports
 Deployed on Vercel from `main`. Pushes to `main` trigger a production build.
 Database migrations in `supabase/` are applied manually, in filename order.
 
+## License
+
+Copyright © 2026 CodeHub Foundation. All rights reserved. This repository is
+public for transparency, not for reuse — see [LICENSE](LICENSE).
+
 ## Contact
 
 hello@codehubfoundation.org
