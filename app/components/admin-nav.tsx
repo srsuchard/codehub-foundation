@@ -11,6 +11,7 @@ const TABS = [
   { href: "/admin/volunteers", label: "Volunteers" },
   { href: "/admin/programs", label: "Programs" },
   { href: "/admin/team", label: "Team & roles", adminOnly: true },
+  { href: "/admin/audit", label: "Audit log", adminOnly: true },
 ];
 
 export function AdminNav({ email, role }: { email: string; role: AppRole }) {
