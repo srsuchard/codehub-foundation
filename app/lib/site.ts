@@ -1,5 +1,15 @@
 export const CONTACT_EMAIL = "hello@codehubfoundation.org";
 
+/**
+ * Social accounts. Add only accounts that actually exist — a dead link on a
+ * nonprofit's site costs more trust than an absent one. The footer renders
+ * nothing at all while this is empty.
+ *
+ * Example:
+ *   { label: "GitHub", href: "https://github.com/codehubfoundation" },
+ */
+export const SOCIAL_LINKS: { label: string; href: string }[] = [];
+
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://codehubfoundation.org";
 

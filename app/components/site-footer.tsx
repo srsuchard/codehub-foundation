@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { CONTACT_EMAIL } from "../lib/site";
+import { CONTACT_EMAIL, SOCIAL_LINKS } from "../lib/site";
 
 const FOOTER_GROUPS = [
   {
@@ -44,6 +44,24 @@ export function SiteFooter() {
             >
               {CONTACT_EMAIL}
             </a>
+
+            {/* Renders nothing until SOCIAL_LINKS has entries. */}
+            {SOCIAL_LINKS.length > 0 && (
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {SOCIAL_LINKS.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer me"
+                      className="inline-block rounded-full border border-line px-3 py-1.5 font-mono text-xs text-slate-400 transition-colors hover:border-neon-blue hover:text-neon-blue"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {FOOTER_GROUPS.map((group) => (
