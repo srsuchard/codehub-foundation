@@ -24,9 +24,13 @@ jobs:
           node-version: 22
           cache: npm
 
-      # ci, not install: fails on a lockfile that doesn't match package.json
-      # rather than quietly resolving something different from production.
-      - run: npm ci
+      # `npm ci` would be stricter, but this lockfile is written on macOS where
+      # Tailwind's optional @napi-rs/wasm-runtime is skipped. On Linux npm
+      # resolves it and its @emnapi/picomatch requirements contradict the
+      # pinned versions, so `npm ci` refuses to install. `npm install` resolves
+      # per-platform and works. The trade: CI may use slightly different
+      # transitive versions than the lockfile records.
+      - run: npm install --no-audit --no-fund
 
       # Next 16 no longer lints during `next build`, so this must run on its own.
       - run: npm run lint
