@@ -120,14 +120,20 @@ export default async function VolunteersPage({
 
         <div className="mt-12 rounded-xl border border-line bg-surface/60 p-6 text-sm text-slate-400">
           <p className="font-semibold text-slate-300">
-            About background checks
+            California AB 506 screening
           </p>
           <p className="mt-2">
-            Record only the outcome here — never upload or paste the report
-            itself. If you run checks through a screening company and decline
-            someone because of what it said, US federal law (the FCRA) requires
-            specific notices before and after that decision. Worth confirming
-            your process with counsel before declining anyone on that basis.
+            Youth service organizations in California must Live Scan anyone with
+            regular contact with minors (DOJ <em>and</em> FBI), train them as
+            mandated reporters, and have them acknowledge a child abuse
+            prevention and reporting policy. All three must be recorded here
+            before someone can be assigned to a program.
+          </p>
+          <p className="mt-3">
+            Record outcomes and dates only — never the report itself or its
+            contents. If you also use a commercial screening company, the FCRA
+            adds notice requirements before and after declining anyone on the
+            basis of a report. Confirm your process with counsel.
           </p>
         </div>
       </div>

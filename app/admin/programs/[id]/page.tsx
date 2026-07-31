@@ -67,11 +67,14 @@ export default async function ProgramDetailPage({
       .from("student_applications")
       .select("id, name, email")
       .order("name"),
-    // Only volunteers who've cleared screening can be put in front of students.
+    // Only volunteers who've cleared AB 506 screening can be put in front of
+    // students. A database trigger enforces the same rule on insert — this
+    // filter just keeps ineligible people out of the picker.
     supabase!
       .from("mentor_applications")
       .select("id, name, email")
       .in("status", ["training", "active"])
+      .eq("ab506_complete", true)
       .order("name"),
   ]);
 
@@ -153,12 +156,14 @@ export default async function ProgramDetailPage({
             addLabel="Assign"
           />
           <p className="-mt-3 text-xs text-slate-600">
-            Only volunteers in <strong>Training</strong> or <strong>Active</strong>{" "}
-            appear here — advance them on the{" "}
+            Only volunteers who are <strong>Training</strong> or{" "}
+            <strong>Active</strong> <em>and</em> have completed AB 506 screening
+            appear here — Live Scan cleared, mandated reporter training, and
+            abuse policy acknowledged. Record those on the{" "}
             <Link href="/admin/volunteers" className="text-neon-blue hover:underline">
               volunteers page
-            </Link>{" "}
-            first.
+            </Link>
+            . The database rejects the assignment either way.
           </p>
         </div>
 

@@ -7,6 +7,13 @@ import { createAuthClient, getSessionProfile } from "./auth";
 import { isStaff } from "./roles";
 import type { FormState } from "./schemas";
 
+/** Empty date inputs arrive as "" — store NULL, not an empty string. */
+const optionalDate = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => value || null);
+
 const updateSchema = z.object({
   id: z.uuid(),
   status: z.enum([
@@ -18,18 +25,23 @@ const updateSchema = z.object({
     "inactive",
     "declined",
   ]),
-  background_check: z.enum([
-    "not_required",
-    "pending",
-    "cleared",
-    "not_cleared",
-  ]),
+  live_scan: z.enum(["not_started", "submitted", "cleared", "not_cleared"]),
+  live_scan_submitted_on: optionalDate,
+  live_scan_cleared_on: optionalDate,
+  live_scan_ati: z
+    .string()
+    .trim()
+    .max(50)
+    .optional()
+    .transform((value) => value || null),
+  mandated_reporter_training_on: optionalDate,
+  abuse_policy_acknowledged_on: optionalDate,
   training_completed: z.union([z.literal("on"), z.literal("")]).optional(),
   internal_notes: z.string().trim().max(4000).optional(),
 });
 
 /**
- * Update a volunteer's pipeline state.
+ * Update a volunteer's pipeline and AB 506 screening state.
  *
  * Enforced twice on purpose: the staff check here, and the RLS policy on
  * mentor_applications. This runs on the signed-in user's own session, so even
@@ -67,7 +79,7 @@ export async function updateVolunteer(
   const { id, training_completed, ...fields } = parsed.data;
 
   // Checkbox → timestamp. Preserve the original completion date when it's
-  // already set, so re-saving the form doesn't keep moving the date forward.
+  // already set, so re-saving doesn't keep moving the date forward.
   const { data: existing } = await supabase
     .from("mentor_applications")
     .select("training_completed_at")
@@ -82,8 +94,7 @@ export async function updateVolunteer(
   const { error } = await supabase
     .from("mentor_applications")
     .update({
-      status: fields.status,
-      background_check: fields.background_check,
+      ...fields,
       internal_notes: fields.internal_notes || null,
       training_completed_at: trainingCompletedAt,
     })

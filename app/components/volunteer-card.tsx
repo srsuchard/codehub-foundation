@@ -5,8 +5,9 @@ import { useActionState } from "react";
 import { INITIAL_FORM_STATE } from "../lib/schemas";
 import { updateVolunteer } from "../lib/volunteer-actions";
 import {
-  BACKGROUND_CHECK_LABELS,
-  BACKGROUND_CHECK_STATUSES,
+  ab506Checklist,
+  LIVE_SCAN_LABELS,
+  LIVE_SCAN_STATUSES,
   VOLUNTEER_STATUS_LABELS,
   VOLUNTEER_STATUS_STYLES,
   VOLUNTEER_STATUSES,
@@ -26,6 +27,8 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
     INITIAL_FORM_STATE,
   );
 
+  const checklist = ab506Checklist(volunteer);
+
   return (
     <article className="rounded-2xl border border-line bg-surface/60 p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -41,11 +44,24 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
             {volunteer.profession} · {volunteer.availability}
           </p>
         </div>
-        <span
-          className={`rounded-full border px-3 py-1 font-mono text-xs ${VOLUNTEER_STATUS_STYLES[volunteer.status]}`}
-        >
-          {VOLUNTEER_STATUS_LABELS[volunteer.status]}
-        </span>
+        <div className="flex flex-col items-end gap-2">
+          <span
+            className={`rounded-full border px-3 py-1 font-mono text-xs ${VOLUNTEER_STATUS_STYLES[volunteer.status]}`}
+          >
+            {VOLUNTEER_STATUS_LABELS[volunteer.status]}
+          </span>
+          <span
+            className={`rounded-full border px-3 py-1 font-mono text-xs ${
+              volunteer.ab506_complete
+                ? "border-neon-green/40 bg-neon-green/10 text-neon-green"
+                : "border-amber-500/40 bg-amber-500/10 text-amber-300"
+            }`}
+          >
+            {volunteer.ab506_complete
+              ? "AB 506 complete"
+              : "AB 506 incomplete"}
+          </span>
+        </div>
       </div>
 
       <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
@@ -67,6 +83,23 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
         )}
       </dl>
 
+      {/* Screening checklist — the gate on being placed with students. */}
+      <ul className="mt-5 grid gap-2 rounded-xl border border-line bg-ink/60 p-4">
+        {checklist.map((item) => (
+          <li key={item.label} className="flex items-center gap-3 text-sm">
+            <span
+              aria-hidden
+              className={item.done ? "text-neon-green" : "text-slate-600"}
+            >
+              {item.done ? "✓" : "○"}
+            </span>
+            <span className={item.done ? "text-slate-300" : "text-slate-500"}>
+              {item.label}
+            </span>
+          </li>
+        ))}
+      </ul>
+
       <form
         action={action}
         className="mt-6 grid gap-4 border-t border-line pt-6"
@@ -75,7 +108,7 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block">
-            <span className="text-xs text-slate-500">Status</span>
+            <span className="text-xs text-slate-500">Pipeline status</span>
             <select
               name="status"
               defaultValue={volunteer.status}
@@ -90,18 +123,76 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
           </label>
 
           <label className="block">
-            <span className="text-xs text-slate-500">Background check</span>
+            <span className="text-xs text-slate-500">Live Scan</span>
             <select
-              name="background_check"
-              defaultValue={volunteer.background_check}
+              name="live_scan"
+              defaultValue={volunteer.live_scan}
               className={`mt-1 ${fieldClass}`}
             >
-              {BACKGROUND_CHECK_STATUSES.map((status) => (
+              {LIVE_SCAN_STATUSES.map((status) => (
                 <option key={status} value={status}>
-                  {BACKGROUND_CHECK_LABELS[status]}
+                  {LIVE_SCAN_LABELS[status]}
                 </option>
               ))}
             </select>
+          </label>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <label className="block">
+            <span className="text-xs text-slate-500">Live Scan submitted</span>
+            <input
+              type="date"
+              name="live_scan_submitted_on"
+              defaultValue={volunteer.live_scan_submitted_on ?? ""}
+              className={`mt-1 ${fieldClass}`}
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs text-slate-500">Cleared on</span>
+            <input
+              type="date"
+              name="live_scan_cleared_on"
+              defaultValue={volunteer.live_scan_cleared_on ?? ""}
+              className={`mt-1 ${fieldClass}`}
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs text-slate-500">
+              ATI number
+              <span className="text-slate-600"> · tracking only</span>
+            </span>
+            <input
+              type="text"
+              name="live_scan_ati"
+              defaultValue={volunteer.live_scan_ati ?? ""}
+              className={`mt-1 ${fieldClass}`}
+            />
+          </label>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-xs text-slate-500">
+              Mandated reporter training
+            </span>
+            <input
+              type="date"
+              name="mandated_reporter_training_on"
+              defaultValue={volunteer.mandated_reporter_training_on ?? ""}
+              className={`mt-1 ${fieldClass}`}
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs text-slate-500">
+              Abuse policy acknowledged
+            </span>
+            <input
+              type="date"
+              name="abuse_policy_acknowledged_on"
+              defaultValue={volunteer.abuse_policy_acknowledged_on ?? ""}
+              className={`mt-1 ${fieldClass}`}
+            />
           </label>
         </div>
 
@@ -125,7 +216,7 @@ export function VolunteerCard({ volunteer }: { volunteer: Volunteer }) {
             defaultChecked={Boolean(volunteer.training_completed_at)}
             className="size-4 rounded border-line bg-ink accent-neon-green"
           />
-          Training complete
+          CodeHub onboarding complete
           {volunteer.training_completed_at && (
             <span className="font-mono text-xs text-slate-500">
               {formatDate(volunteer.training_completed_at)}
