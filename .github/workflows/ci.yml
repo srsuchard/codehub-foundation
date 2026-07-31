@@ -24,13 +24,15 @@ jobs:
           node-version: 22
           cache: npm
 
-      # `npm ci` would be stricter, but this lockfile is written on macOS where
-      # Tailwind's optional @napi-rs/wasm-runtime is skipped. On Linux npm
-      # resolves it and its @emnapi/picomatch requirements contradict the
-      # pinned versions, so `npm ci` refuses to install. `npm install` resolves
-      # per-platform and works. The trade: CI may use slightly different
-      # transitive versions than the lockfile records.
-      - run: npm install --no-audit --no-fund
+      # ci, not install: fails on a lockfile that doesn't match package.json
+      # rather than quietly resolving something different from production.
+      #
+      # The overrides in package.json are what make this work across platforms.
+      # Tailwind's optional @napi-rs/wasm-runtime asks for @emnapi 2.0.0-alpha
+      # while the rest of the tree is on 1.x; that package is a wasm fallback,
+      # never loaded when the native oxide binary exists, so pinning it to 1.x
+      # is safe and lets one lockfile satisfy both linux-x64 and darwin-arm64.
+      - run: npm ci
 
       # Next 16 no longer lints during `next build`, so this must run on its own.
       - run: npm run lint
