@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+
+  experimental: {
+    // Document uploads go through a Server Action, and the default cap is 1MB —
+    // too small for a scanned PDF. Keep MAX_UPLOAD_BYTES in app/lib/documents.ts
+    // below this, leaving room for multipart overhead.
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
 };
 
 export default nextConfig;

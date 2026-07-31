@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { createAuthClient, getSessionProfile } from "./auth";
-import { isStaff } from "./roles";
+import { isStaff, PORTAL_ROLES } from "./roles";
 import type { FormState } from "./schemas";
 
 const loginSchema = z.object({
@@ -48,12 +48,14 @@ export async function signIn(
   // applicant data. Anyone without a staff role is signed straight back out.
   const profile = await getSessionProfile();
 
-  if (!isStaff(profile?.role)) {
+  // Board members belong here too, but they land on the portal rather than the
+  // staff dashboard, which their session couldn't read anyway.
+  if (!profile || !PORTAL_ROLES.includes(profile.role)) {
     await supabase.auth.signOut();
     return { status: "error", message: "Invalid email or password." };
   }
 
-  redirect("/admin");
+  redirect(isStaff(profile.role) ? "/admin" : "/admin/board");
 }
 
 export async function signOut() {

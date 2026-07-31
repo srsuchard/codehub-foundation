@@ -40,6 +40,17 @@ export default async function NoAccessPage() {
           )}
         </p>
 
+        {profile?.role === "board_member" && (
+          <p className="mt-6">
+            <a
+              href="/admin/board"
+              className="text-neon-blue hover:underline"
+            >
+              Go to the board portal →
+            </a>
+          </p>
+        )}
+
         <form action={signOut} className="mt-8">
           <button
             type="submit"
