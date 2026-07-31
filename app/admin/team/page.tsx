@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { RoleSelect } from "../../components/role-select";
-import { createAuthClient, getSessionProfile } from "../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../lib/auth";
 import { ROLE_LABELS, type Profile } from "../../lib/roles";
 
 export const metadata: Metadata = {
@@ -17,6 +17,7 @@ export default async function TeamPage() {
 
   if (!profile) redirect("/admin/login");
   if (profile.role !== "admin") redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const supabase = await createAuthClient();
 

@@ -11,7 +11,7 @@ import {
   isDiff,
   type AuditEntry,
 } from "../../lib/audit";
-import { createAuthClient, getSessionProfile } from "../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../lib/auth";
 
 export const metadata: Metadata = {
   title: "Audit log",
@@ -33,6 +33,7 @@ export default async function AuditPage({
   // Audit is admin-only — the RLS policy says the same, so a staff session
   // reaching here would read zero rows anyway.
   if (profile.role !== "admin") redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const { table } = await searchParams;
   const tables = Object.keys(AUDIT_TABLE_LABELS);

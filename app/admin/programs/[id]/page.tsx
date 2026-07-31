@@ -7,7 +7,7 @@ import {
   RosterManager,
   type RosterPerson,
 } from "../../../components/roster-manager";
-import { createAuthClient, getSessionProfile } from "../../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../../lib/auth";
 import {
   assignVolunteer,
   enrollStudent,
@@ -39,6 +39,7 @@ export default async function ProgramDetailPage({
 
   if (!profile) redirect("/admin/login");
   if (!isStaff(profile.role)) redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const { id } = await params;
   const supabase = await createAuthClient();

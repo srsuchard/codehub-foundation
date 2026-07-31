@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { VolunteerCard } from "../../components/volunteer-card";
-import { createAuthClient, getSessionProfile } from "../../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../../lib/auth";
 import { isStaff } from "../../lib/roles";
 import {
   VOLUNTEER_STATUS_LABELS,
@@ -29,6 +29,7 @@ export default async function VolunteersPage({
 
   if (!profile) redirect("/admin/login");
   if (!isStaff(profile.role)) redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   const { status: statusFilter } = await searchParams;
 

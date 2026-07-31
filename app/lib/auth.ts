@@ -61,6 +61,23 @@ export async function createAuthClient({
   });
 }
 
+/**
+ * Whether this session still owes a 2FA step.
+ *
+ * `nextLevel` is aal2 only when the user has a verified factor, so this is
+ * false for anyone who hasn't enrolled. Row-level security enforces the same
+ * rule; this exists so the UI can redirect instead of showing empty pages.
+ */
+export async function isMfaPending(): Promise<boolean> {
+  const supabase = await createAuthClient();
+  if (!supabase) return false;
+
+  const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (!data) return false;
+
+  return data.nextLevel === "aal2" && data.currentLevel !== "aal2";
+}
+
 /** The signed-in user's profile, or null. Role comes from the database. */
 export async function getSessionProfile(): Promise<Profile | null> {
   const supabase = await createAuthClient();

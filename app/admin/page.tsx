@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { createAuthClient, getSessionProfile } from "../lib/auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "../lib/auth";
 import { isStaff, ROLE_LABELS } from "../lib/roles";
 
 export const metadata: Metadata = {
@@ -102,6 +102,7 @@ export default async function AdminPage() {
 
   if (!profile) redirect("/admin/login");
   if (!isStaff(profile.role)) redirect("/admin/no-access");
+  if (await isMfaPending()) redirect("/admin/verify");
 
   // Reads run on the user's own session, so row-level security applies. A
   // non-staff session reaching here would get zero rows, not a leak.

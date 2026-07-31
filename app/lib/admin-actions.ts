@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { createAuthClient, getSessionProfile } from "./auth";
+import { createAuthClient, getSessionProfile, isMfaPending } from "./auth";
 import { isStaff, PORTAL_ROLES } from "./roles";
 import type { FormState } from "./schemas";
 
@@ -54,6 +54,8 @@ export async function signIn(
     await supabase.auth.signOut();
     return { status: "error", message: "Invalid email or password." };
   }
+
+  if (await isMfaPending()) redirect("/admin/verify");
 
   redirect(isStaff(profile.role) ? "/admin" : "/admin/board");
 }
