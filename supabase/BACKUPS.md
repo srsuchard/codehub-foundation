@@ -73,6 +73,14 @@ existing tables.
 
 ## Restoring
 
+There are two different situations, and they need different steps. Confusing
+them is how a restore goes wrong.
+
+| Situation | Use |
+|---|---|
+| Database damaged, project intact | **Supabase daily backup** — brings back schema *and* data |
+| Project gone entirely | **Rebuild from migrations**, then restore data from an export |
+
 ### From a Supabase daily backup
 
 1. Supabase → Database → Backups
@@ -83,7 +91,41 @@ existing tables.
 Restores take the project offline briefly. The public site keeps serving
 (the pages are static), but forms will fail while it happens.
 
-### From an export
+### Rebuilding from migrations into a new project
+
+Apply `supabase/*.sql` **in filename order** — they are numbered because the
+order is a dependency chain, not a preference. `05-ab506.sql` alters a table
+`03-volunteers.sql` creates, and everything depends on `02-rbac.sql`'s role
+helpers.
+
+```
+01-schema.sql → 02-rbac.sql → 03-volunteers.sql → 04-programs.sql
+→ 05-ab506.sql → 06-audit.sql → 07-documents.sql → 08-mfa.sql
+```
+
+**Then bootstrap an admin, or the rebuild is unusable.** No migration creates
+one — a fresh database has correct policies, zero users, and therefore nobody
+who can grant anyone access:
+
+1. Supabase → Authentication → Users → **Add user**. Use your email, set a
+   password, tick *Auto Confirm User*.
+2. In the SQL editor:
+
+   ```sql
+   insert into public.profiles (id, email, role)
+   select id, email, 'admin' from auth.users
+   on conflict (id) do update set role = 'admin';
+   ```
+
+   This works because the role-escalation guard exempts sessions with no
+   `auth.uid()` — the SQL editor is one. That exemption exists precisely so the
+   first admin can be created.
+
+3. Set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and
+   `SUPABASE_PUBLISHABLE_KEY` in the deployment to point at the new project,
+   and redeploy.
+
+### Restoring data from an export
 
 ```bash
 psql "$DATABASE_URL" < codehub-backup-YYYY-MM-DD/database.sql
@@ -118,3 +160,20 @@ Then sign in and confirm the admin pages load.
 Restore into a **throwaway Supabase project**, not this one, and run the checks
 above. Worth doing once before real applications arrive, and again after any
 change to the schema.
+
+### What the first rehearsal found
+
+Run 2026-08-01, as a static audit rather than a live restore. Two defects, both
+fixed in the same change:
+
+- **The documented apply order was wrong.** "Filename order" meant alphabetical,
+  which put `ab506.sql` first — before the table it alters exists. A rebuild
+  would have failed on the first file. Migrations are now numbered.
+- **No migration created an admin.** A rebuild produced a correct, locked
+  database that nobody could administer. Bootstrap steps added above.
+
+Every other live object — 12 tables, 12 functions, 18 policies, 13 triggers,
+7 enums — was confirmed reproduced by the migration files.
+
+Still unrehearsed: an actual Supabase snapshot restore, and re-uploading storage
+objects. Both need a throwaway project.

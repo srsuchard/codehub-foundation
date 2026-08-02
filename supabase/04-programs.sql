@@ -1,5 +1,5 @@
 -- CodeHub Foundation — program management
--- Run AFTER schema.sql, rbac.sql, and volunteers.sql. Safe to re-run.
+-- Run AFTER 01-schema.sql, 02-rbac.sql, and 03-volunteers.sql. Safe to re-run.
 --
 -- Programs are the thing students enrol in and volunteers are assigned to, so
 -- this file also retires mentor_applications.assigned_programs (free text) in

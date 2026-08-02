@@ -1,5 +1,5 @@
 -- CodeHub Foundation — volunteer & mentor management
--- Run AFTER schema.sql and rbac.sql. Safe to re-run.
+-- Run AFTER 01-schema.sql and 02-rbac.sql. Safe to re-run.
 --
 -- Design note: mentor_applications stays the intake record — what the person
 -- actually told us. The columns added here are the *pipeline* on top of it:

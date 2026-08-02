@@ -1,5 +1,5 @@
 -- CodeHub Foundation — California AB 506 volunteer screening
--- Run AFTER schema.sql, rbac.sql, volunteers.sql, programs.sql. Safe to re-run.
+-- Run AFTER 01-schema.sql through 04-programs.sql. Safe to re-run.
 --
 -- AB 506 (California, in force since 2022) requires youth service organizations
 -- to screen anyone with regular contact with minors via DOJ *and* FBI

@@ -1,5 +1,5 @@
 -- CodeHub Foundation — two-factor enforcement
--- Run AFTER rbac.sql and documents.sql. Safe to re-run.
+-- Run AFTER 02-rbac.sql and 07-documents.sql. Safe to re-run.
 --
 -- Enrolment on its own is decoration: a user could enrol a TOTP factor and the
 -- application could still hand them data on a password-only session. The check

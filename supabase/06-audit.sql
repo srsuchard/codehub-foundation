@@ -1,5 +1,5 @@
 -- CodeHub Foundation — audit log
--- Run AFTER schema.sql, rbac.sql, volunteers.sql, programs.sql, ab506.sql.
+-- Run AFTER 01-schema.sql through 05-ab506.sql.
 -- Safe to re-run.
 --
 -- Deliberate scope: this records WHO changed WHAT DECISION and WHEN — not the
