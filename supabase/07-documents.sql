@@ -1,6 +1,5 @@
 -- CodeHub Foundation — document centre and board portal
--- Run AFTER schema.sql, rbac.sql, volunteers.sql, programs.sql, ab506.sql,
--- audit.sql. Safe to re-run.
+-- Run AFTER 01-schema.sql through 06-audit.sql. Safe to re-run.
 --
 -- Bylaws, policies, agendas and minutes have a different audience to applicant
 -- data: board members must read them, but board members must NOT see student

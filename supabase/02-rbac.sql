@@ -1,5 +1,5 @@
 -- CodeHub Foundation — roles and row-level authorization
--- Run AFTER schema.sql, in the Supabase SQL Editor. Safe to re-run.
+-- Run AFTER 01-schema.sql, in the Supabase SQL Editor. Safe to re-run.
 --
 -- Design notes:
 --

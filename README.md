@@ -40,7 +40,9 @@ must never be exposed to the browser; `app/lib/supabase.ts` imports
 ## Deployment
 
 Deployed on Vercel from `main`. Pushes to `main` trigger a production build.
-Database migrations in `supabase/` are applied manually, in filename order.
+Database migrations in `supabase/` are applied manually, in filename order —
+they are numbered because that order is a dependency chain. See
+[supabase/BACKUPS.md](supabase/BACKUPS.md) for restore and rebuild steps.
 
 ## License
 
